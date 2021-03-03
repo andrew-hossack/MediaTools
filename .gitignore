@@ -1,2 +1,4 @@
 __pycache__
-dat/__pycache__
+lib/AutoCompiler/private
+lib/AutoCompiler/temp
+lib/AutoCompiler/output

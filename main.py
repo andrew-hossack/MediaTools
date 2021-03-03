@@ -1,11 +1,15 @@
-from TikTokTools import TikTokTools
+'''
+ # @ Author: Andrew Hossack
+ # @ Create Time: 2021-03-02 20:55:32
+ # @ Description:
+ '''
+
+import lib.AutoCompiler
 import dat.exampledict
-
-
-
+from TikTokTools import TikTokTools
 
 def main(**kwargs):
-    api = TikTokTools(verbosity=1)
+    api = TikTokTools(verbosity=0)
     num_videos_requested = kwargs.get('num_videos_requested', 5)
     length_seconds = kwargs.get('length_seconds', 20)
 

@@ -9,16 +9,18 @@ from TikTokApi import TikTokApi
 class TikTokTools():
     '''
     TikTok Tools Class leverages TikTokApi heavily
-
     https://github.com/davidteather/TikTok-Api
     '''
+
     def __init__(self, verbosity=0, **kwargs):
+        '''
+        Verbosity:  0 = no print
+                    1 = print statements
+                    2 = extra verbose
+        '''
         self.api = TikTokApi(**kwargs)
         self.videos = []
         self.requested_length = 0
-        # Verbosity 0 = no print
-        # Verbosity 1 = print statements
-        # Verbosity 2 = extra verbose
         self._verbosity = verbosity
 
     def _check_video_shorter_than(self, video_entry):
@@ -63,8 +65,9 @@ class TikTokTools():
         for video in videolist_raw:
             # TODO eventually implement where new video is retrieved until list
             # is full
-            # while len(self.videos) < num_videos_requested:
             self._add_video(video)
+            if len(self.videos) == num_videos_requested:
+                break
         return self.videos
 
     def _add_video(self, video):
@@ -83,10 +86,19 @@ class TikTokTools():
             print(f'added_video {added_video}')
         return added_video
 
-    # ~~~~~~~~~~~~~~~~~~~ TODO List ~~~~~~~~~~~~~~~~~~~ #
+    def _get_video_by_keyword(self):
+        '''
+        Get video by keyword search
+        '''
+        raise NotImplementedError
+
+
     '''
+    ~~~~~~~~~~~~~~~~~~~ TODO List ~~~~~~~~~~~~~~~~~~~
     1. get_video_list bug
     2. Implement get videos by keyword search
+    3. Create YoutubeTools API for uploading - see ~/Desktop/AutoCompiler
+    4. Figure out video layout
 
     '''
     
