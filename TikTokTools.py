@@ -83,4 +83,10 @@ class TikTokTools():
             print(f'added_video {added_video}')
         return added_video
 
+    # ~~~~~~~~~~~~~~~~~~~ TODO List ~~~~~~~~~~~~~~~~~~~ #
+    '''
+    1. get_video_list bug
+    2. Implement get videos by keyword search
+
+    '''
     
