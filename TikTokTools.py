@@ -53,21 +53,24 @@ class TikTokTools():
         Return video list
         videos (list): list of dictionary tiktok objects
         '''
+        # TODO BUG every time a new video is requested, it always retrieves
+        # the first video in a list somewhere that is always the same. Need
+        videolist_raw = self.api.trending(count=20, custom_verifyFp="")
+        # to retrieve unique video.
+        # HOTFIX: Retrieve a list of 20, 30, 50 videos and parse through each
+        # of those as the results.
         self.requested_length = length_seconds
-        while len(self.videos) < num_videos_requested:
-            self._add_video()
+        for video in videolist_raw:
+            # TODO eventually implement where new video is retrieved until list
+            # is full
+            # while len(self.videos) < num_videos_requested:
+            self._add_video(video)
         return self.videos
 
-    def _add_video(self):
+    def _add_video(self, video):
         '''
         Add new video to self.videos list
         '''
-
-        # TODO BUG every time a new video is requested, it always retrieves
-        # the first video in a list somewhere that is always the same. Need
-        video = self.api.trending(count=1, custom_verifyFp="")[0]
-        # to retrieve unique video.
-
         not_in_list = self._check_video_not_in_list(video)
         is_shorter = self._check_video_shorter_than(video)
         added_video = None
@@ -79,3 +82,5 @@ class TikTokTools():
         if self._verbosity:
             print(f'added_video {added_video}')
         return added_video
+
+    
