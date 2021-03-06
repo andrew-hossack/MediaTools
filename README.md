@@ -1,7 +1,7 @@
 # YouTube Automation Project
 A project for automating the simple task of uploading mindless content to YouTube. This library is written to leverage different input video sources and includes resources like TikTokTools to get content. 
 
-In the future, other sources of video, audio, and text-based content will be provided such as Reddit over Test To Speech (TTS) and more.
+In the future, other sources of video, audio, and text-based content will be provided such as Reddit over Text To Speech (TTS) and more.
 
 ## ```TikTokTools Class```
 Built on [TikTokApi by David Teather](https://github.com/davidteather/TikTok-Api), ```TikTokTools``` is a wrapper class to enable the user to quickly source content from TikTok without needing developer API access. 
