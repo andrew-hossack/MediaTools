@@ -9,3 +9,7 @@ video:
   title: 'Video Title'
   description: 'Video Description'
   author: 'Author Name'
+
+metadata:
+
+  tags: ['Tag1', 'Tag2', 'Tag3']
