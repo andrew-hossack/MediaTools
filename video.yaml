@@ -1,0 +1,11 @@
+# 
+# @ Author: Andrew Hossack
+# @ Create Time: 2021-03-05 21:36:15
+# @ Description: video.yaml file
+#
+
+video:
+
+  title: 'Video Title'
+  description: 'Video Description'
+  author: 'Author Name'
