@@ -22,4 +22,9 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
+    install_requires=[
+        "google-api-python-client",
+        "TikTokApi",
+        "oauth2client",
+    ]
 )
