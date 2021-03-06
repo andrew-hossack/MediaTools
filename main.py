@@ -7,16 +7,24 @@
 from common.TikTokTools import TikTokTools
 from common.VideoTools import VideoTools
 
-def main(**kwargs):
+def main():
     api = TikTokTools(verbosity=0)
-    num_videos_requested = kwargs.get('num_videos_requested', 5)
-    length_seconds = kwargs.get('length_seconds', 15)
+    videotools = VideoTools()
 
-    videolist_parsed = api.get_video_list(num_videos_requested, length_seconds, buffer_len=5)
+    num_videos_requested = 3    # Max number of return videos
+    max_length_seconds = 20     # Max length of videos
+    videolist_parsed = api.get_video_list(num_videos_requested, max_length_seconds, buffer_len=10)
 
     for tiktok in videolist_parsed:
-        # Prints the id of the tiktok
-        print(f"Title: {tiktok['desc']} by {tiktok['author']['nickname']}\nLink: {tiktok['video']['playAddr']}\n\n")
+        # Get new video from list
+        desc = tiktok['desc']
+        downloadaddr = tiktok['video']['downloadAddr']
+        author = tiktok['author']['nickname']
+        print(f"Title: {desc} by {author}\nLink: {downloadaddr}")
+
+        # Download Video
+        videotools.video_downloader_from_url(downloadaddr)
+        print(f'Done Downloading to {videotools._downloads_dir}\n')
 
 if __name__ == "__main__":
     main()

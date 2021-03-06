@@ -6,19 +6,23 @@
 
 import os
 from pathlib import Path
+from queue import Queue
+import requests
+from time import sleep, time
 import yaml
 
 class VideoTools():
     '''
     VideoTools class for video postprocessing
     '''
-    def __init__(self):
+    def __init__(self, config_yaml='video.yaml', download_dir='dat'):
         '''
         Loads in video.yaml config settings
         '''
         self._config = {}
-        self._downloads_dir = Path(f'{Path(os.path.join(os.path.dirname(__file__))).parent}/dat')
-        self._config_yaml_path = Path(os.path.join(os.path.dirname(__file__))).parent.joinpath('video.yaml')
+        self._download_q = Queue()
+        self._downloads_dir = Path(f'{Path(os.path.join(os.path.dirname(__file__))).parent}/{download_dir}')
+        self._config_yaml_path = Path(os.path.join(os.path.dirname(__file__))).parent.joinpath(config_yaml)
         self._cleanup_downloads_dir()
         # Needs to match config yaml and get_updated_config_data()
         self.title = ''
@@ -26,11 +30,18 @@ class VideoTools():
         self.author = ''
         self.get_updated_config_data()
 
-    def video_downloader_from_url(self, download_url):
+    def video_downloader_from_url(self, download_url, title='video'):
         '''
-        Download video from url to filepath
+        Download video from url to filepath to self._downloads_dir
+        title (str): optional title of download
+            will append '_n' where n (int) repreents repeated filenames
         '''
-        raise NotImplementedError
+        n = sum(1 for f in os.listdir(self._downloads_dir) if os.path.isfile(os.path.join(self._downloads_dir, f)))
+        title = f'{title}_{n}'
+        self._download_q.put(download_url)
+        with requests.get(self._download_q.get(), allow_redirects=True) as req:
+            with open(f'{self._downloads_dir}/{title}.mp4', 'wb') as file:
+                file.write(req.content)
 
     def _cleanup_downloads_dir(self):
         '''

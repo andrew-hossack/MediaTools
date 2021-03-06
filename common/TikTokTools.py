@@ -53,8 +53,10 @@ class TikTokTools():
 
     def get_video_list(self, num_videos_requested, length_seconds, buffer_len=30):
         '''
+        buffer_length (int): number of unparsed videos to initially download
+
         Return video list
-        videos (list): list of dictionary tiktok objects
+            videos (list): list of dictionary tiktok objects
         '''
         # TODO BUG every time a new video is requested, it always retrieves
         # the first video in a list somewhere that is always the same. Need
@@ -64,12 +66,11 @@ class TikTokTools():
         # of those as the results.
         self.requested_length = length_seconds
         for video in videolist_raw:
-            # TODO eventually implement where new video is retrieved until list
+            # TODO eventually implement where new UNIQUE video is retrieved until list
             # is full
             self._add_video(video)
-            if self._videos.qsize == num_videos_requested:
-                break
-        return self._videos.queue
+            if len(self._videos.queue) >= num_videos_requested:
+                return self._videos.queue
 
     def _add_video(self, video):
         '''
