@@ -39,7 +39,7 @@ Videos and data that are being manipulated through this library shall be stored 
 Video data will be stored in a configuration file. More information can be seen below.
 
 ### Configuration Management
-Video configuration settings shall be stored in *TikTok/video*.yaml_ file. Currently, only video title, decription, and author as well as optional metadata tags are stored. 
+Video configuration settings shall be stored in *TikTok/video.yaml* file. Currently, only video title, decription, and author as well as optional metadata tags are stored. 
 
 Upon initialization, this configuration file will be loaded into the class. If a user makes a change to the yaml file during application runtime, they will need to call ```get_updated_config_data``` to update class info.
 
@@ -47,7 +47,9 @@ Upon initialization, this configuration file will be loaded into the class. If a
 One helpful method is ```video_downloader_from_url(download_url)```. This method will download videos to *downloads_dir_*. 
 
 ```python
-from common.VideoTools import VideoTools
 videoInstance = VideoTools()
 print(videoInstance.author)
+
+# Download Video
+videotools.video_downloader_from_url(downloadaddr)
 ```

@@ -25,9 +25,6 @@ class VideoTools():
         self._config_yaml_path = Path(os.path.join(os.path.dirname(__file__))).parent.joinpath(config_yaml)
         self._cleanup_downloads_dir()
         # Needs to match config yaml and get_updated_config_data()
-        self.title = ''
-        self.description = ''
-        self.author = ''
         self.get_updated_config_data()
 
     def video_downloader_from_url(self, download_url, title='video'):
@@ -55,6 +52,18 @@ class VideoTools():
         '''
         with open(self._config_yaml_path) as config:
             self._config = yaml.load(config, Loader=yaml.FullLoader)
+        # TODO consider not setting self.XYZ and rather just reference the yaml
         self.title = self._config['video']['title']
         self.description = self._config['video']['description']
         self.author = self._config['video']['author']
+        self.runtime = self._config['video']['playtime_min_seconds']
+
+    def compile_all(self):
+        '''
+        Method to compile video data from self._downloads_dir
+        Features to consider adding:
+            - Intro and outtro video
+            - Resolution
+            - Background audio
+        '''
+        raise NotImplementedError
