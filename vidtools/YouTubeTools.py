@@ -4,12 +4,11 @@
  # @ Description:
  '''
 
-
 try:
+    # Python 2
     import httplib
 except:
-    # Python3 does not have httplib, so try importing
-    # http.client as httplib instead
+    # Python 3
     import http.client as httplib
 import httplib2
 import os
@@ -17,7 +16,6 @@ import random
 import sys
 import time
 
-# Try importing apiclient, not sure what this will do
 import apiclient
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -26,16 +24,14 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 
-'''
-TODO Make this work. This was taken from 
-https://developers.google.com/youtube/v3/guides/uploading_a_video
-'''
 
 class YouTubeTools():
     '''
     Helper class to make uploading to YouTube easier
     Wrapper class for Google Api Python Client:
         https://developers.google.com/youtube/v3/guides/uploading_a_video
+
+    Make sure to include your client_secrets.json file in vidtools directory!
     '''
     def __init__(self, **kwargs):
         '''
@@ -183,6 +179,7 @@ class YouTubeTools():
                                                                         e.content)
                 else:
                     raise
+            # TODO for some reason this is throwing an error
             except self.RETRIABLE_EXCEPTIONS as e:
                 error = "A retriable error occurred: %s" % e
 
@@ -196,32 +193,3 @@ class YouTubeTools():
                 sleep_seconds = random.random() * max_sleep
                 print("Sleeping %f seconds and then retrying..." % sleep_seconds)
                 time.sleep(sleep_seconds)
-
-
-if __name__ == '__main__':
-    instance = YouTubeTools()
-
-    argparser.add_argument("--file", required=True, help="Video file to upload")
-    argparser.add_argument("--title", help="Video title", default="Test Title")
-    argparser.add_argument("--description", help="Video description",
-        default="Test Description")
-    argparser.add_argument("--category", default="22",
-        help="Numeric video category. " +
-        "See https://developers.google.com/youtube/v3/docs/videoCategories/list")
-    argparser.add_argument("--keywords", help="Video keywords, comma separated",
-        default="")
-    argparser.add_argument("--privacyStatus", choices=instance.VALID_PRIVACY_STATUSES,
-        default=instance.VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
-    args = argparser.parse_args()
-
-    if not os.path.exists(args.file):
-        exit("Please specify a valid file using the --file= parameter.")
-
-    # Try instantiation
-    youtube = instance.get_authenticated_service(args)
-
-    try:
-        instance.initialize_upload(youtube, args)
-    except HttpError as e:
-        print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
-

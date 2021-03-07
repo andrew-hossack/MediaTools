@@ -1,14 +1,16 @@
 '''
  # @ Author: Andrew Hossack
  # @ Create Time: 2021-03-02 20:55:32
- # @ Description:
+ # @ Description: Driver file for uploading TikTok videos.
+        Feel free to build off of this as an example!
  '''
 
-from common.TikTokTools import TikTokTools
-from common.VideoTools import VideoTools
+from vidtools.TikTokTools import TikTokTools
+from vidtools.VideoTools import VideoTools
+from vidtools.YouTubeTools import YouTubeTools
 
-def main():
-    api = TikTokTools(verbosity=0)
+if __name__ == "__main__":
+    api = TikTokTools(verbosity=1)
     videotools = VideoTools()
 
     num_videos_requested = 3    # Max number of return videos
@@ -25,6 +27,3 @@ def main():
         # Download Video
         videotools.video_downloader_from_url(downloadaddr)
         print(f'Done Downloading to {videotools._downloads_dir}\n')
-
-if __name__ == "__main__":
-    main()

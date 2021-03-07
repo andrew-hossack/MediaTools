@@ -53,3 +53,51 @@ print(videoInstance.author)
 # Download Video
 videotools.video_downloader_from_url(downloadaddr)
 ```
+
+## ```YouTubeTools Class```
+A wrapper class for ```googleapiclient``` [https://developers.google.com/youtube/v3/guides/uploading_a_video](https://developers.google.com/youtube/v3/guides/uploading_a_video
+), this class adds functionality to upload videos to YouTube.
+
+Make sure you have included your OAuth 2.0 ```client_secrets.json``` in the *vidtools* dir else upload will not work!
+
+### Upload Keyword Args
+Please see ```__init__``` for more details.
+
+- filepath (str)
+- title (str)
+- description (str)
+- category (str)
+  - [https://developers.google.com/youtube/v3/docs/videoCategories/list](https://developers.google.com/youtube/v3/docs/videoCategories/list)
+- keywords (str)
+- privacyStatus (str)
+  - Valid values are public, private, and unlisted
+
+### Examples
+
+```python
+instance = YouTubeTools()
+
+argparser.add_argument("--file", required=True, help="Video file to upload")
+argparser.add_argument("--title", help="Video title", default="Test Title")
+argparser.add_argument("--description", help="Video description",
+    default="Test Description")
+argparser.add_argument("--category", default="22",
+    help="Numeric video category. " +
+    "See https://developers.google.com/youtube/v3/docs/videoCategories/list")
+argparser.add_argument("--keywords", help="Video keywords, comma separated",
+    default="")
+argparser.add_argument("--privacyStatus", choices=instance.VALID_PRIVACY_STATUSES,
+    default=instance.VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
+args = argparser.parse_args()
+
+if not os.path.exists(args.file):
+    exit("Please specify a valid file using the --file= parameter.")
+
+# Try instantiation
+youtube = instance.get_authenticated_service(args)
+
+try:
+    instance.initialize_upload(youtube, args)
+except HttpError as e:
+    print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
+```
