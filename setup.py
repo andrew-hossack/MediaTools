@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="VidTools",
-    version="0.0.1",
+    version="0.0.2",
     author="Andrew Hossack",
     author_email="andrew_hossack@outlook.com",
     description="VidTools is a video tools python package",
@@ -26,5 +26,6 @@ setuptools.setup(
         "google-api-python-client",
         "TikTokApi",
         "oauth2client",
+        "praw",
     ]
 )

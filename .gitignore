@@ -5,4 +5,3 @@ lib/AutoCompiler/output
 lib/AutoCompiler/private.py
 dat/*
 __init__.pyc
-vidtools/client_secrets.json

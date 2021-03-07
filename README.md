@@ -58,7 +58,7 @@ videotools.video_downloader_from_url(downloadaddr)
 A wrapper class for ```googleapiclient``` [https://developers.google.com/youtube/v3/guides/uploading_a_video](https://developers.google.com/youtube/v3/guides/uploading_a_video
 ), this class adds functionality to upload videos to YouTube.
 
-Make sure you have included your OAuth 2.0 ```client_secrets.json``` in the *vidtools* dir else upload will not work!
+Make sure you have included your OAuth 2.0 ```private/youtube_client_secrets.json``` in the *vidtools* dir else upload will not work!
 
 ### Upload Keyword Args
 Please see ```__init__``` for more details.
@@ -100,4 +100,25 @@ try:
     instance.initialize_upload(youtube, args)
 except HttpError as e:
     print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
+```
+
+## ```RedditTools Class```
+A wrapper class for PRAW [https://praw.readthedocs.io/en/latest/](https://praw.readthedocs.io/en/latest/). Upon init, this class will load in secrets data from ```private/reddit_client_secrets.json```. For more information on reddit client secrets, please see [https://github.com/reddit-archive/reddit/wiki/OAuth2](https://github.com/reddit-archive/reddit/wiki/OAuth2).
+
+To get a new refresh token, you can run the python file found at ```lib/refreshtokengen.py```.
+
+### Examples
+Before using this class, make sure to fill in client secrets!
+
+```python
+rt = RedditTools()
+url = 'https://www.reddit.com/r/redditdev/comments/hasnnc/where_do_i_find_the_reddit_client_id_and_secret/'
+rt.set_url(url)
+
+# Get info from post
+title = rt.get_title()
+author = rt.get_author()
+text = rt.get_selftext()
+
+print(f'{title} by {author}\n{text}')
 ```

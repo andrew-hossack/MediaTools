@@ -24,6 +24,8 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 
+# TODO get_authenticated_service should accept kwargs
+# TODO check authentication json works in /private directory loction
 
 class YouTubeTools():
     '''
@@ -79,7 +81,7 @@ class YouTubeTools():
         #   https://developers.google.com/youtube/v3/guides/authentication
         # For more information about the client_secrets.json file format, see:
         #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-        self.CLIENT_SECRETS_FILE = "client_secrets.json"
+        self.CLIENT_SECRETS_FILE = "/private/youtube_client_secrets.json"
 
         # This OAuth 2.0 access scope allows an application to upload files to the
         # authenticated user's YouTube channel, but doesn't allow other types of access.
@@ -178,7 +180,7 @@ class YouTubeTools():
                     error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status,
                                                                         e.content)
                 else:
-                    raise
+                    raise "HttpError occured"
             # TODO for some reason this is throwing an error
             except self.RETRIABLE_EXCEPTIONS as e:
                 error = "A retriable error occurred: %s" % e

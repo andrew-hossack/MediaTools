@@ -9,6 +9,8 @@ from vidtools.TikTokTools import TikTokTools
 from vidtools.VideoTools import VideoTools
 from vidtools.YouTubeTools import YouTubeTools
 
+# NOTE This driver file is NOT COMPLETE!
+
 if __name__ == "__main__":
     api = TikTokTools(verbosity=1)
     videotools = VideoTools()
