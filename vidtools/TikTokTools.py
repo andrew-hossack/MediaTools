@@ -4,10 +4,12 @@
  # @ Description:
  '''
 
+
 from TikTokApi import TikTokApi
 from queue import Queue
 
-class TikTokTools():
+
+class TikTokTools:
     '''
     TikTok Tools wrapper for TikTokApi
     https://github.com/davidteather/TikTok-Api
@@ -18,18 +20,18 @@ class TikTokTools():
                     1 = print statements
                     2 = extra verbose
         '''
-        self.api = TikTokApi(**kwargs)
+        self._api = TikTokApi(**kwargs)
         self._videos = Queue()  # Implemented Queue for fun
-        self.requested_length = 0
+        self._requested_length = 0
         self._verbosity = verbosity
 
     def _check_video_shorter_than(self, video_entry):
         '''
         Returns boolean if video is less than given length
         '''
-        res = video_entry['video']['duration'] < self.requested_length
+        res = video_entry['video']['duration'] < self._requested_length
         if self._verbosity:
-            print(f"Video shorter than {self.requested_length}: {res}")
+            print(f"Video shorter than {self._requested_length}: {res}")
         return res
 
     def _check_video_not_in_list(self, video):
@@ -51,20 +53,30 @@ class TikTokTools():
             print(f'not_in_list {not_in_list}')
         return not_in_list
 
-    def get_video_list(self, num_videos_requested, length_seconds, buffer_len=30):
+    def get_video_list(self, num_videos_requested, max_length_seconds, buffer_len=30):
         '''
-        buffer_length (int): number of unparsed videos to initially download
-
-        Return video list
-            videos (list): list of dictionary tiktok objects
+        args:
+            num_videos_requested (int):
+                Number of videos to try to return based on length parameter
+            max_length_seconds (int):
+                Filter video list by maximum length. Will try to return a list
+                of videos no longer than length_seconds
+        kwargs:
+            buffer_length (int): 
+                number of unparsed videos to initially download
+                This is a hotfix to solve getting unique tiktoks
+        
+        Returns:
+            videos (list): 
+                list of dictionary tiktok objects
         '''
         # TODO BUG every time a new video is requested, it always retrieves
         # the first video in a list somewhere that is always the same. Need
-        videolist_raw = self.api.trending(buffer_len, custom_verifyFp="")
+        videolist_raw = self._api.trending(buffer_len, custom_verifyFp="")
         # to retrieve unique video.
         # HOTFIX: Retrieve a list of 20, 30, 50 videos and parse through each
         # of those as the results.
-        self.requested_length = length_seconds
+        self._requested_length = max_length_seconds
         for video in videolist_raw:
             # TODO eventually implement where new UNIQUE video is retrieved until list
             # is full
@@ -94,13 +106,27 @@ class TikTokTools():
         '''
         raise NotImplementedError
 
+    def get_video_author(self, tiktokobject):
+        '''
+        Get video author
+        '''
+        return tiktokobject['desc']
+
+    def get_video_download_address(self, tiktokobject):
+        '''
+        Get video download address
+        '''
+        return tiktokobject['video']['downloadAddr']
+
+    def get_video_description(self, tiktokobject):
+        '''
+        Get video description
+        '''
+        return tiktokobject['author']['nickname']
 
     '''
     ~~~~~~~~~~~~~~~~~~~ TODO List ~~~~~~~~~~~~~~~~~~~
     1. get_video_list bug
     2. Implement get videos by keyword search
-    3. Create YoutubeTools API for uploading - see ~/Desktop/AutoCompiler
-    4. Figure out video layout
-
     '''
     
