@@ -4,5 +4,4 @@ lib/AutoCompiler/temp
 lib/AutoCompiler/output
 lib/AutoCompiler/private.py
 dat/*
-common/__init__.pyc
-common/__pycache__
+__init__.pyc

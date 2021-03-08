@@ -9,6 +9,7 @@ video:
   title: 'Video Title'
   description: 'Video Description'
   author: 'Author Name'
+  playtime_min_seconds: 600
 
 metadata:
 
