@@ -16,7 +16,7 @@ class VideoTools():
     '''
     VideoTools class for video postprocessing
     '''
-    def __init__(self, config_yaml='video.yaml', download_dir='dat'):
+    def __init__(self, config_yaml='video.yaml', download_dir='dat/temp'):
         '''
         Loads in video.yaml config settings
         '''
