@@ -3,6 +3,9 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+# TODO Figure out how to include /examples, /lib, /dat
+# vidtools/private in the install
+
 setuptools.setup(
     name="VidTools",
     version="0.0.2",
@@ -27,5 +30,8 @@ setuptools.setup(
         "TikTokApi",
         "oauth2client",
         "praw",
+        "google-cloud",
+        "google-cloud-core",
+        "google-cloud-texttospeech"
     ]
 )

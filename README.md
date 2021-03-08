@@ -1,4 +1,4 @@
-# YouTube Automation Project
+# VidTools Content Creation Library
 A project for automating the simple task of uploading mindless content to YouTube. This library is written to leverage different input video sources and includes resources like TikTokTools to get content. 
 
 In the future, other sources of video, audio, and text-based content will be provided such as Reddit over Text To Speech (TTS) and more.
@@ -71,33 +71,17 @@ Please see ```__init__``` for more details.
 - keywords (str)
 - privacyStatus (str)
   - Valid values are public, private, and unlisted
+- videoDir (str): Directory of video to upload
 
 ### Examples
 
 ```python
-instance = YouTubeTools()
+instance = YouTubeTools(file='dat/out.mp4')
+youtube = instance.get_authenticated_service()
 
-argparser.add_argument("--file", required=True, help="Video file to upload")
-argparser.add_argument("--title", help="Video title", default="Test Title")
-argparser.add_argument("--description", help="Video description",
-    default="Test Description")
-argparser.add_argument("--category", default="22",
-    help="Numeric video category. " +
-    "See https://developers.google.com/youtube/v3/docs/videoCategories/list")
-argparser.add_argument("--keywords", help="Video keywords, comma separated",
-    default="")
-argparser.add_argument("--privacyStatus", choices=instance.VALID_PRIVACY_STATUSES,
-    default=instance.VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
-args = argparser.parse_args()
-
-if not os.path.exists(args.file):
-    exit("Please specify a valid file using the --file= parameter.")
-
-# Try instantiation
-youtube = instance.get_authenticated_service(args)
-
+# Try to upload a file out.mp4 located in /dat
 try:
-    instance.initialize_upload(youtube, args)
+    instance.initialize_upload(youtube)
 except HttpError as e:
     print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))
 ```
@@ -121,4 +105,19 @@ author = rt.get_author()
 text = rt.get_selftext()
 
 print(f'{title} by {author}\n{text}')
+```
+
+## ```TTSTools Class```
+Text To Speech (TTS) Tools ```TTSTools``` class is a helper class and wrapper for using Google wavenet Text To Speech. More information about the google tts client libraries can be found at the link [https://cloud.google.com/docs/authentication/production](https://cloud.google.com/docs/authentication/production).
+
+The main functionality of this class is to synthesize lifelike voice from a text entry.
+
+### Examples
+
+```python
+tts = TTSHelper()
+
+# Load in text file
+with open('dat/exampletextfile.txt') as file:
+  tts.synthesize_text(file)
 ```

@@ -94,6 +94,23 @@ class TikTokTools():
         '''
         raise NotImplementedError
 
+    def get_video_author(self, tiktokobject):
+        '''
+        Get video author
+        '''
+        return tiktokobject['desc']
+
+    def get_video_download_address(self, tiktokobject):
+        '''
+        Get video download address
+        '''
+        return tiktokobject['video']['downloadAddr']
+
+    def get_video_description(self, tiktokobject):
+        '''
+        Get video description
+        '''
+        return tiktokobject['author']['nickname']
 
     '''
     ~~~~~~~~~~~~~~~~~~~ TODO List ~~~~~~~~~~~~~~~~~~~

@@ -12,6 +12,7 @@ except:
     import http.client as httplib
 import httplib2
 import os
+from pathlib import Path
 import random
 import sys
 import time
@@ -35,9 +36,10 @@ class YouTubeTools():
 
     Make sure to include your client_secrets.json file in vidtools directory!
     '''
-    def __init__(self, **kwargs):
+    def __init__(self, video_dir='dat', **kwargs):
         '''
         file (str) path: This argument identifies the location of the video file that you are uploading.
+            The default uploadable file should be named video.mp4
         title (str): The title of the video that you are uploading. 
             The default value is Test title
         description (str): The description of the video that you're uploading. 
@@ -52,7 +54,13 @@ class YouTubeTools():
             When uploading test videos, you may want to specify a --privacyStatus argument 
             value to ensure that those videos are private or unlisted. 
             Valid values are public, private, and unlisted
+        video_dir (str): Directory of video to upload
+            The default directory will be /dat unless specified
+
+        Videos will be stored in self._video_directory directory as out.mp4 file
         '''
+        self._video_directory = Path(f'{Path(os.path.join(os.path.dirname(__file__))).parent}/{video_dir}')
+        
         # Explicitly tell the underlying HTTP transport library not to retry, since
         # we are handling retry logic ourselves.
         httplib2.RETRIES = 1
@@ -106,10 +114,37 @@ class YouTubeTools():
         https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
         """ % os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         self.CLIENT_SECRETS_FILE))
-
         self.VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
+        self._args = None
+        self.set_args(**kwargs)
 
-    def get_authenticated_service(self, args):
+    def set_args(self, outfile_name='video.mp4', **kwargs):
+        '''
+        videoname (str): name of video file to be uploaded. 
+            The default value will be video.mp4
+        '''
+        filearg = kwargs.get('file', f'{self._video_directory}/{outfile_name}')
+        titlearg = kwargs.get('title', "Test Title")
+        descriptionarg = kwargs.get('description', "Test Description")
+        categoryarg = kwargs.get('category', "22")
+        keywordarg = kwargs.get('keywords', "")
+        privacystatusarg = kwargs.get('privacyStatus', self.VALID_PRIVACY_STATUSES[0])
+        argparser.add_argument("--file", help="Video file to upload", default=filearg)
+        argparser.add_argument("--title", help="Video title", default=titlearg)
+        argparser.add_argument("--description", help="Video description",
+            default=descriptionarg)
+        argparser.add_argument("--category", default=categoryarg,
+            help="Numeric video category. " +
+            "See https://developers.google.com/youtube/v3/docs/videoCategories/list")
+        argparser.add_argument("--keywords", help="Video keywords, comma separated",
+            default=keywordarg)
+        argparser.add_argument("--privacyStatus", choices=self.VALID_PRIVACY_STATUSES,
+            default=privacystatusarg, help="Video privacy status.")
+        self.args = argparser.parse_args()
+        if not os.path.exists(self.args.file):
+            exit(f"Check file {self._video_directory}/{outfile_name} exists")
+
+    def get_authenticated_service(self):
         flow = flow_from_clientsecrets(self.CLIENT_SECRETS_FILE,
             scope=self.YOUTUBE_UPLOAD_SCOPE,
             message=self.MISSING_CLIENT_SECRETS_MESSAGE)
@@ -118,25 +153,25 @@ class YouTubeTools():
         credentials = storage.get()
 
         if credentials is None or credentials.invalid:
-            credentials = run_flow(flow, storage, args)
+            credentials = run_flow(flow, storage, self.args)
 
         return build(self.YOUTUBE_API_SERVICE_NAME, self.YOUTUBE_API_VERSION,
             http=credentials.authorize(httplib2.Http()))
 
-    def initialize_upload(self, youtube, options):
+    def initialize_upload(self, youtube):
         tags = None
-        if options.keywords:
-            tags = options.keywords.split(",")
+        if self.args.keywords:
+            tags = self.args.keywords.split(",")
 
         body=dict(
             snippet=dict(
-            title=options.title,
-            description=options.description,
+            title=self.args.title,
+            description=self.args.description,
             tags=tags,
-            categoryId=options.category
+            categoryId=self.args.category
             ),
             status=dict(
-            privacyStatus=options.privacyStatus
+            privacyStatus=self.args.privacyStatus
             )
         )
 
@@ -155,7 +190,7 @@ class YouTubeTools():
             # practice, but if you're using Python older than 2.6 or if you're
             # running on App Engine, you should set the chunksize to something like
             # 1024 * 1024 (1 megabyte).
-            media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
+            media_body=MediaFileUpload(self.args.file, chunksize=-1, resumable=True)
         )
 
         self.resumable_upload(insert_request)
