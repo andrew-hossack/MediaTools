@@ -8,34 +8,36 @@ from google.cloud import texttospeech
 import os
 from pathlib import Path
 
-class TTSHelper():
+class TTSHelper:
     '''
     Text to speech helper class
     https://googleapis.dev/python/texttospeech/latest/index.html
     '''
-    def __init__(self, output_directory='dat', outfile_name='audio.mp3', **kwargs):
+    def __init__(self, secrets_filepath, outfile_name='audio.mp3', **kwargs):
         '''
-        output_directory (str): directory where output audio file will be saved to
-            Defaults to /dat
-        outfile_name (str): name of audio output file
-            Defaults to audio.mp3
+        args:
+            secrets_filepath (str):
+                Absolute path to secrets file json
+        kwargs:
+            outfile_name (str): name of audio output file
+                Defaults to audio.mp3
         '''
-        self.text = None
-        self._output_directory = Path(f'{Path(os.path.join(os.path.dirname(__file__))).parent}/{output_directory}')
-        self._secrets_filepath = Path(f'{Path(os.path.join(os.path.dirname(__file__)))}/private/google_tts_secrets.json')
+        self._text = None
+        self._output_directory = Path(os.path.join(os.path.dirname(__file__))).joinpath('dat')
+        self._secrets_filepath = Path(secrets_filepath)
         self._outfile_name = outfile_name
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self._secrets_filepath
         self._client = texttospeech.TextToSpeechClient()
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self._secrets_filepath
 
     def synthesize_speech(self, text, language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL):
         """Synthesizes speech from the input string of text or ssml.
         Note: ssml must be well-formed according to:
             https://www.w3.org/TR/speech-synthesis/
         """
-        self.text = text
+        self._text = text
 
         # Set the text input to be synthesized
-        synthesis_input = texttospeech.SynthesisInput(text=self.text)
+        synthesis_input = texttospeech.SynthesisInput(text=self._text)
 
         # Build the voice request, select the language code ("en-US") and the ssml
         # voice gender ("neutral")

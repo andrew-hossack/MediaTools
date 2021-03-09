@@ -1,1 +1,4 @@
-include video.yaml
+include vidtools/video.yaml
+include vidtools/examples
+include vidtools/lib/refreshtokengen.py
+graft vidtools/dat

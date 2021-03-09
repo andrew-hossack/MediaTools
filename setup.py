@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="VidTools",
-    version="0.0.2",
+    version="0.0.3",
     author="Andrew Hossack",
     author_email="andrew_hossack@outlook.com",
     description="VidTools is a video tools python package",
@@ -25,6 +25,7 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
+    include_package_data=True,
     install_requires=[
         "google-api-python-client",
         "TikTokApi",

@@ -1,0 +1,10 @@
+metadata:
+  tags:
+  - Tag1
+  - Tag2
+  - Tag3
+video:
+  author: Author Name
+  description: Video Description
+  playtime_min_seconds: 600
+  title: Test Title Goes Here

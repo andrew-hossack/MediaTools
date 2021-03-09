@@ -12,15 +12,14 @@ from vidtools.YouTubeTools import YouTubeTools
 # NOTE This driver file is NOT COMPLETE!
 
 if __name__ == "__main__":
-    tt = TikTokTools(verbosity=1)
+    tt = TikTokTools()
     vt = VideoTools()
+    ytt = YouTubeTools('/Users/andrew/TikTok/vidtools/private/reddit_client_secrets.json')
 
-    num_videos_requested = 3    # Max number of return videos
-    max_length_seconds = 20     # Max length of videos returned
-    buffer_length = 10          # Temporary fix to make sure enough videos are added to buffer
-                                # Buffer is an un-filtered list of video instances 
-                                # Consider implementing method to get new videos each time
-    videolist_parsed = tt.get_video_list(num_videos_requested, max_length_seconds, buffer_len=buffer_length)
+    videolist_parsed = tt.get_video_list(
+        num_videos_requested=1, 
+        max_length_seconds=20, 
+        buffer_len=10 )
 
     for obj in videolist_parsed:
         # Get new video from list
@@ -32,3 +31,5 @@ if __name__ == "__main__":
         # Download Video
         vt.video_downloader_from_url(downloadaddr)
         print(f'Done Downloading to {vt._downloads_dir}\n')
+    
+    

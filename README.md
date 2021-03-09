@@ -3,6 +3,12 @@ A project for automating the simple task of uploading mindless content to YouTub
 
 In the future, other sources of video, audio, and text-based content will be provided such as Reddit over Text To Speech (TTS) and more.
 
+## Installation Instructions
+To install this package using pip, in the root directory *vidtools/* run the command
+```bash
+pip install .
+```
+
 ## ```TikTokTools Class```
 Built on [TikTokApi by David Teather](https://github.com/davidteather/TikTok-Api), ```TikTokTools``` is a wrapper class to enable the user to quickly source content from TikTok without needing developer API access. 
 
@@ -54,6 +60,17 @@ print(videoInstance.author)
 videotools.video_downloader_from_url(downloadaddr)
 ```
 
+Another helpful method is ```update_config(updated_dict)```. This method can be used to safely update ```video.yaml``` file.
+
+```python
+updated_dict = {
+    'video': {
+        'title':'123455'
+        }
+    }
+vt.update_config(updated_dict)
+```
+
 ## ```YouTubeTools Class```
 A wrapper class for ```googleapiclient``` [https://developers.google.com/youtube/v3/guides/uploading_a_video](https://developers.google.com/youtube/v3/guides/uploading_a_video
 ), this class adds functionality to upload videos to YouTube.
@@ -76,7 +93,7 @@ Please see ```__init__``` for more details.
 ### Examples
 
 ```python
-instance = YouTubeTools(file='dat/out.mp4')
+instance = YouTubeTools(file='video.mp4')
 youtube = instance.get_authenticated_service()
 
 # Try to upload a file out.mp4 located in /dat
@@ -115,9 +132,11 @@ The main functionality of this class is to synthesize lifelike voice from a text
 ### Examples
 
 ```python
-tts = TTSHelper()
+# Instantiate TTSHelper and save outfile to dat/audio.mp3
+tts = TTSHelper(outfile_name='audio.mp3')
 
 # Load in text file
 with open('dat/exampletextfile.txt') as file:
+  # Synthesize speech
   tts.synthesize_text(file)
 ```

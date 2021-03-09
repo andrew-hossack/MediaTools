@@ -12,19 +12,23 @@ from prawcore.exceptions import RequestException
 from praw.models import MoreComments
 import sys
 
-class RedditTools():
+class RedditTools:
     '''
     Wrapper class for praw
     https://praw.readthedocs.io/en/latest/
     '''
-    def __init__(self):
+    def __init__(self, secrets_filepath):
         '''
-        self.prawclient (praw): PRAW Client instance
-        self.submission (post): PRAW post object, must call
-                                set_url(url) to use other methods
+        args:
+            secrets_filepath (str):
+                Absolute path to secrets file
+
+        callables:
+            self.prawclient (praw): PRAW Client instance
+            self.submission (post): PRAW post object, must call
+                                    set_url(url) to use other methods
         '''
-        self._secrets_dir = Path(
-            f'{Path(os.path.join(os.path.dirname(__file__)))}/private/reddit_client_secrets.json')
+        self._secrets_dir = Path(secrets_filepath)
         with open(self._secrets_dir) as redditsecrets:
             self._secrets = json.load(redditsecrets)
         self.prawclient = praw.Reddit(client_id=self._secrets['web']['client_id'], 

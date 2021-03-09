@@ -1,7 +1,2 @@
 __pycache__
-lib/AutoCompiler/private
-lib/AutoCompiler/temp
-lib/AutoCompiler/output
-lib/AutoCompiler/private.py
-dat/*
-__init__.pyc
+*.pyc

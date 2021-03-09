@@ -28,7 +28,7 @@ from oauth2client.tools import argparser, run_flow
 # TODO get_authenticated_service should accept kwargs
 # TODO check authentication json works in /private directory loction
 
-class YouTubeTools():
+class YouTubeTools:
     '''
     Helper class to make uploading to YouTube easier
     Wrapper class for Google Api Python Client:
@@ -36,30 +36,40 @@ class YouTubeTools():
 
     Make sure to include your client_secrets.json file in vidtools directory!
     '''
-    def __init__(self, video_dir='dat', **kwargs):
+    def __init__(self, secrets_filepath, **kwargs):
         '''
-        file (str) path: This argument identifies the location of the video file that you are uploading.
-            The default uploadable file should be named video.mp4
-        title (str): The title of the video that you are uploading. 
-            The default value is Test title
-        description (str): The description of the video that you're uploading. 
-            The default value is Test description
-        category (str): The category ID for the YouTube video category associated with the video. 
-            The default value is 22, which refers to the People & Blogs category
-            https://developers.google.com/youtube/v3/docs/videoCategories/list
-        keywords (str): A comma-separated list of keywords associated with the video. 
-            The default value is an empty string
-        privacyStatus (str): The privacy status of the video. 
-            The default behavior is for an uploaded video to be publicly visible (public). 
-            When uploading test videos, you may want to specify a --privacyStatus argument 
-            value to ensure that those videos are private or unlisted. 
-            Valid values are public, private, and unlisted
-        video_dir (str): Directory of video to upload
-            The default directory will be /dat unless specified
-
-        Videos will be stored in self._video_directory directory as out.mp4 file
+        args:
+            secrets_filepath (str):
+                Absolute path to secrets file
+        
+        kwargs:
+            file (str):
+                Video file to look for to upload. Defaults to video.mp4
+                This argument identifies the location of the video file that you are uploading.
+            title (str): 
+                The title of the video that you are uploading. 
+                The default value is Test title
+            description (str): 
+                The description of the video that you're uploading. 
+                The default value is Test description
+            category (str): 
+                The category ID for the YouTube video category associated with the video. 
+                The default value is 22, which refers to the People & Blogs category
+                https://developers.google.com/youtube/v3/docs/videoCategories/list
+            keywords (str): 
+                A comma-separated list of keywords associated with the video. 
+                The default value is an empty string
+            privacyStatus (str): 
+                The privacy status of the video. 
+                The default behavior is for an uploaded video to be publicly visible (public). 
+                When uploading test videos, you may want to specify a --privacyStatus argument 
+                value to ensure that those videos are private or unlisted. 
+                Valid values are public, private, and unlisted
+            video_dir (str): 
+                Directory of video to upload
+                The default directory will be /dat unless specified
         '''
-        self._video_directory = Path(f'{Path(os.path.join(os.path.dirname(__file__))).parent}/{video_dir}')
+        self._video_directory = Path(os.path.join(os.path.dirname(__file__))).joinpath('dat')
         
         # Explicitly tell the underlying HTTP transport library not to retry, since
         # we are handling retry logic ourselves.
@@ -89,7 +99,7 @@ class YouTubeTools():
         #   https://developers.google.com/youtube/v3/guides/authentication
         # For more information about the client_secrets.json file format, see:
         #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-        self.CLIENT_SECRETS_FILE = "/private/youtube_client_secrets.json"
+        self.CLIENT_SECRETS_FILE = Path(secrets_filepath)
 
         # This OAuth 2.0 access scope allows an application to upload files to the
         # authenticated user's YouTube channel, but doesn't allow other types of access.
@@ -118,12 +128,13 @@ class YouTubeTools():
         self._args = None
         self.set_args(**kwargs)
 
-    def set_args(self, outfile_name='video.mp4', **kwargs):
+    def set_args(self, **kwargs):
         '''
         videoname (str): name of video file to be uploaded. 
             The default value will be video.mp4
         '''
-        filearg = kwargs.get('file', f'{self._video_directory}/{outfile_name}')
+        filearg = kwargs.get('file', self._video_directory.joinpath('video.mp4'))
+        self._filename = filearg
         titlearg = kwargs.get('title', "Test Title")
         descriptionarg = kwargs.get('description', "Test Description")
         categoryarg = kwargs.get('category', "22")
@@ -141,8 +152,6 @@ class YouTubeTools():
         argparser.add_argument("--privacyStatus", choices=self.VALID_PRIVACY_STATUSES,
             default=privacystatusarg, help="Video privacy status.")
         self.args = argparser.parse_args()
-        if not os.path.exists(self.args.file):
-            exit(f"Check file {self._video_directory}/{outfile_name} exists")
 
     def get_authenticated_service(self):
         flow = flow_from_clientsecrets(self.CLIENT_SECRETS_FILE,
@@ -159,6 +168,8 @@ class YouTubeTools():
             http=credentials.authorize(httplib2.Http()))
 
     def initialize_upload(self, youtube):
+        if not os.path.exists(self._filename):
+            exit(f"Check file {self._filename} exists")
         tags = None
         if self.args.keywords:
             tags = self.args.keywords.split(",")
@@ -198,6 +209,8 @@ class YouTubeTools():
     # This method implements an exponential backoff strategy to resume a
     # failed upload.
     def resumable_upload(self, insert_request):
+        if not os.path.exists(self._filename):
+            exit(f"Check file {self._filename} exists")
         response = None
         error = None
         retry = 0
