@@ -18,7 +18,7 @@ class VideoTools:
     VideoTools class for video postprocessing and configuration management.
     Video config can be managed with video.yaml found in the root directory
     '''
-    def __init__(self, config_yaml='video.yaml', download_dir='dat'):
+    def __init__(self, config_yaml='video.yaml', download_dir='dat/temp'):
         '''
         Loads in video.yaml config settings
         '''
