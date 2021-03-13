@@ -22,7 +22,7 @@ class TikTokTools:
         '''
         self._api = TikTokApi(**kwargs)
         self._videos = Queue()  # Implemented Queue for fun
-        self._requested_length = 0
+        self._requested_length
         self._verbosity = verbosity
 
     def _check_video_shorter_than(self, video_entry):
@@ -55,6 +55,11 @@ class TikTokTools:
 
     def get_video_list(self, num_videos_requested, max_length_seconds, buffer_len=30):
         '''
+        Main driver function for TikTokTools. Returns a list of max length
+         num_videos_requested tiktokapi videos (dict) from the TikTokAPI
+         'Trending' category. The list will then be filtered to make sure each
+         video is not over max_length_seconds.
+
         args:
             num_videos_requested (int):
                 Number of videos to try to return based on length parameter
@@ -107,26 +112,10 @@ class TikTokTools:
         raise NotImplementedError
 
     def get_video_author(self, tiktokobject):
-        '''
-        Get video author
-        '''
         return tiktokobject['desc']
 
     def get_video_download_address(self, tiktokobject):
-        '''
-        Get video download address
-        '''
         return tiktokobject['video']['downloadAddr']
 
     def get_video_description(self, tiktokobject):
-        '''
-        Get video description
-        '''
         return tiktokobject['author']['nickname']
-
-    '''
-    ~~~~~~~~~~~~~~~~~~~ TODO List ~~~~~~~~~~~~~~~~~~~
-    1. get_video_list bug
-    2. Implement get videos by keyword search
-    '''
-    

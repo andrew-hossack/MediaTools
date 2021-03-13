@@ -15,6 +15,7 @@ class TTSHelper:
     Text to speech helper class
     https://googleapis.dev/python/texttospeech/latest/index.html
     '''
+
     def __init__(self, secrets_filepath, outfile_name='audio.mp3', **kwargs):
         '''
         args:
@@ -61,7 +62,7 @@ class TTSHelper:
         )
 
         # The response's audio_content is binary.
-        with open(f'{self._output_directory}/{self._outfile_name}', "wb") as out:
+        with open(os.path.join(self._output_directory, self._outfile_name), "wb") as out:
             # Write the response to the output file.
             out.write(response.audio_content)
             print('Audio content written to file "output.mp3"')

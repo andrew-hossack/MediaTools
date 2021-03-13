@@ -33,7 +33,7 @@ class VideoTools:
     def video_downloader_from_url(self, download_url, title='video'):
         '''
         Download video from url to filepath to self._downloads_dir
-        title (str): optional title of download
+        title (str): optional title of download, do not include '.mp4'
             will append '_n' where n (int) repreents repeated filenames
         '''
         n = sum(
@@ -42,7 +42,7 @@ class VideoTools:
         title = f'{title}_{n}'
         self._download_q.put(download_url)
         with requests.get(self._download_q.get(), allow_redirects=True) as req:
-            with open(f'{self._downloads_dir}/{title}.mp4', 'wb') as file:
+            with open(os.path.join(self._downloads_dir, f'{title}.mp4'), 'wb') as file:
                 file.write(req.content)
 
     def update_config(self, updated_dict):
@@ -87,7 +87,7 @@ class VideoTools:
         self.description = self._config['video']['description']
         self.author = self._config['video']['author']
         self.runtime = self._config['video']['playtime_min_seconds']
-        self.metadata = self._config['metadata']['tags']
+        self.tags = self._config['metadata']['tags']
 
     def get_config(self):
         '''

@@ -29,6 +29,7 @@ class YouTubeTools:
 
     Make sure to include your client_secrets.json file in vidtools directory!
     '''
+
     def __init__(self, secrets_filepath, **kwargs):
         '''
         args:
@@ -62,6 +63,7 @@ class YouTubeTools:
                 Directory of video to upload
                 The default directory will be /dat unless specified
         '''
+
         self._video_directory = Path(__file__).parent.joinpath('dat')
         
         # Explicitly tell the underlying HTTP transport library not to retry, since
@@ -119,11 +121,11 @@ class YouTubeTools:
         
         self.VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
         self._args = None
-        self.set_args(**kwargs)
+        self._set_args(**kwargs)
 
-    def set_args(self, **kwargs):
+    def _set_args(self, **kwargs):
         '''
-        videoname (str): name of video file to be uploaded. 
+        title, --titlearg (str): name of video file to be uploaded. 
             The default value will be video.mp4
         '''
         filearg = kwargs.get('file', self._video_directory.joinpath('video.mp4'))
@@ -222,7 +224,6 @@ class YouTubeTools:
                                                                         e.content)
                 else:
                     raise "HttpError occured"
-            # TODO for some reason this is throwing an error
             except self.RETRIABLE_EXCEPTIONS as e:
                 error = "A retriable error occurred: %s" % e
 

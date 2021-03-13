@@ -4,15 +4,15 @@
  # @ Description: Reddit to TTS example
  '''
 
+
 from vidtools.RedditTools import RedditTools
 from vidtools.TTSTools import TTSHelper
-import os
 
-'''
-Download a reddit post and convert to audio file for processing
-'''
 
 if __name__ == '__main__':
+    '''
+    Download a reddit post and convert to audio file for processing
+    '''
     
     rt = RedditTools('/Users/andrew/Documents/VidTools/vidtools/private/reddit_client_secrets.json')
     tts = TTSHelper('/Users/andrew/Documents/VidTools/vidtools/private/google_tts_secrets.json')
