@@ -4,32 +4,34 @@
  # @ Description: Text To Speech class
  '''
 
+
 from google.cloud import texttospeech
 import os
-from pathlib import Path
+from vidtools.WorkspaceManager import ManagedWorkspace
 
-class TTSHelper:
+
+class TTSHelper(ManagedWorkspace):
     '''
     Text to speech helper class
     https://googleapis.dev/python/texttospeech/latest/index.html
     '''
-    def __init__(self, secrets_filepath, outfile_name='audio.mp3', **kwargs):
+
+    def __init__(self, outfile_name='audio.mp3', **kwargs):
         '''
-        args:
-            secrets_filepath (str):
-                Absolute path to secrets file json
         kwargs:
             outfile_name (str): name of audio output file
                 Defaults to audio.mp3
         '''
+        super().__init__(**kwargs)
         self._text = None
-        self._output_directory = Path(os.path.join(os.path.dirname(__file__))).joinpath('dat')
-        self._secrets_filepath = Path(secrets_filepath)
+        self._output_directory = self.managed_dir_path.joinpath('dat')
         self._outfile_name = outfile_name
         self._client = texttospeech.TextToSpeechClient()
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self._secrets_filepath
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.secrets_path
 
-    def synthesize_speech(self, text, language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL):
+    def synthesize_speech(self, text, 
+                          language_code="en-US", 
+                          ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL):
         """Synthesizes speech from the input string of text or ssml.
         Note: ssml must be well-formed according to:
             https://www.w3.org/TR/speech-synthesis/
@@ -57,7 +59,7 @@ class TTSHelper:
         )
 
         # The response's audio_content is binary.
-        with open(f'{self._output_directory}/{self._outfile_name}', "wb") as out:
+        with open(os.path.join(self._output_directory, self._outfile_name), "wb") as out:
             # Write the response to the output file.
             out.write(response.audio_content)
             print('Audio content written to file "output.mp3"')
