@@ -7,42 +7,47 @@
 
 import collections.abc
 import os
-from pathlib import Path
 import pprint
 from queue import Queue
 import requests
+from vidtools.WorkspaceManager import ManagedWorkspace
 import yaml
 
 
-class VideoTools:
+class VideoTools(ManagedWorkspace):
     '''
     VideoTools class for video postprocessing and configuration management.
     Video config can be managed with video.yaml found in the root directory
     '''
-    def __init__(self, config_yaml='video.yaml', download_dir='dat/temp'):
+    def __init__(self, config_yaml='video.yaml'):
         '''
         Loads in video.yaml config settings
+        kwargs:
+            config_yaml (str):
+                Name of configuration yaml file to load in from 
+                Defaults to video.yaml
         '''
-        self._config = {}
+        super().__init__()
+        self.config = {}
+        self.managed_dir_path
         self._download_q = Queue()
-        self._downloads_dir = Path(__file__).parent.joinpath(download_dir)
-        self._config_yaml_path = Path(__file__).parent.joinpath(config_yaml)
-        self._cleanup_downloads_dir()
+        self._config_yaml_path = self.managed_dir_path.joinpath(config_yaml)
+        self.cleanup()
         self._load_config()
 
     def video_downloader_from_url(self, download_url, title='video'):
         '''
-        Download video from url to filepath to self._downloads_dir
+        Download video from url to filepath to self.managed_dir_path
         title (str): optional title of download, do not include '.mp4'
             will append '_n' where n (int) repreents repeated filenames
         '''
         n = sum(
-            1 for f in os.listdir(self._downloads_dir) if os.path.isfile(
-                os.path.join(self._downloads_dir, f)))
+            1 for f in os.listdir(self.managed_dir_path) if os.path.isfile(
+                os.path.join(self.managed_dir_path, f)))
         title = f'{title}_{n}'
         self._download_q.put(download_url)
         with requests.get(self._download_q.get(), allow_redirects=True) as req:
-            with open(os.path.join(self._downloads_dir, f'{title}.mp4'), 'wb') as file:
+            with open(os.path.join(self.managed_dir_path, f'{title}.mp4'), 'wb') as file:
                 file.write(req.content)
 
     def update_config(self, updated_dict):
@@ -59,7 +64,7 @@ class VideoTools:
                 }
             update_config(updated_dict)
         '''
-        self._update_config_recursive(self._config, updated_dict)
+        self._update_config_recursive(self.config, updated_dict)
 
     def _update_config_recursive(self, d, u):
         for k, v in u.items():
@@ -71,40 +76,27 @@ class VideoTools:
             yaml.dump(d, f)
         return d
 
-    def _cleanup_downloads_dir(self):
-        '''
-        Remove all files from _downloads_dir
-        '''
-        os.system(f'rm -rf {self._downloads_dir}/*')
-
     def _load_config(self):
         '''
-        Get config data from self._config_yaml file and update self
+        Get config data from self.config_yaml file and update self
         '''
-        with open(self._config_yaml_path) as config:
-            self._config = yaml.load(config, Loader=yaml.FullLoader)
-        self.title = self._config['video']['title']
-        self.description = self._config['video']['description']
-        self.author = self._config['video']['author']
-        self.runtime = self._config['video']['playtime_min_seconds']
-        self.tags = self._config['metadata']['tags']
-
-    def get_config(self):
-        '''
-        Returns the config yaml file video.yaml
-        '''
-        return self._config
+        self.config = self.load_yaml(self._config_yaml_path)
+        self.title = self.config['video']['title']
+        self.description = self.config['video']['description']
+        self.author = self.config['video']['author']
+        self.runtime = self.config['video']['playtime_min_seconds']
+        self.tags = self.config['metadata']['tags']
 
     def pp_config(self):
         '''
         Pretty print config
         '''
         pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(self._config)
+        pp.pprint(self.config)
 
     def compile_all(self):
         '''
-        Method to compile video data from self._downloads_dir
+        Method to compile video data from self.managed_dir_path
         Features to consider adding:
             - Intro and outtro video
             - Resolution

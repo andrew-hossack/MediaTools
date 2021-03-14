@@ -7,9 +7,10 @@
 
 from TikTokApi import TikTokApi
 from queue import Queue
+from vidtools.WorkspaceManager import ManagedWorkspace
 
 
-class TikTokTools:
+class TikTokTools(ManagedWorkspace):
     '''
     TikTok Tools wrapper for TikTokApi
     https://github.com/davidteather/TikTok-Api
@@ -20,8 +21,9 @@ class TikTokTools:
                     1 = print statements
                     2 = extra verbose
         '''
+        super().__init__(secrets_filepath=None)
         self._api = TikTokApi(**kwargs)
-        self._videos = Queue()  # Implemented Queue for fun
+        self._videos = Queue()
         self._requested_length
         self._verbosity = verbosity
 

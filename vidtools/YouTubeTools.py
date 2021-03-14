@@ -1,7 +1,6 @@
 '''
  # @ Author: Andrew Hossack
  # @ Create Time: 2021-03-06 11:56:04
- # @ Description:
  '''
 
 
@@ -19,9 +18,10 @@ from googleapiclient.http import MediaFileUpload
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
+from vidtools.WorkspaceManager import ManagedWorkspace
 
 
-class YouTubeTools:
+class YouTubeTools(ManagedWorkspace):
     '''
     Helper class to make uploading to YouTube easier
     Wrapper class for Google Api Python Client:
@@ -30,12 +30,8 @@ class YouTubeTools:
     Make sure to include your client_secrets.json file in vidtools directory!
     '''
 
-    def __init__(self, secrets_filepath, **kwargs):
-        '''
-        args:
-            secrets_filepath (str):
-                Absolute path to secrets file
-        
+    def __init__(self, **kwargs):
+        '''        
         kwargs:
             file (str):
                 Video file to look for to upload. Defaults to video.mp4
@@ -63,8 +59,7 @@ class YouTubeTools:
                 Directory of video to upload
                 The default directory will be /dat unless specified
         '''
-
-        self._video_directory = Path(__file__).parent.joinpath('dat')
+        super().__init__()
         
         # Explicitly tell the underlying HTTP transport library not to retry, since
         # we are handling retry logic ourselves.
@@ -94,7 +89,7 @@ class YouTubeTools:
         #   https://developers.google.com/youtube/v3/guides/authentication
         # For more information about the client_secrets.json file format, see:
         #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-        self.CLIENT_SECRETS_FILE = Path(secrets_filepath)
+        self.CLIENT_SECRETS_FILE = self.secrets_path
 
         # This OAuth 2.0 access scope allows an application to upload files to the
         # authenticated user's YouTube channel, but doesn't allow other types of access.
@@ -128,7 +123,7 @@ class YouTubeTools:
         title, --titlearg (str): name of video file to be uploaded. 
             The default value will be video.mp4
         '''
-        filearg = kwargs.get('file', self._video_directory.joinpath('video.mp4'))
+        filearg = kwargs.get('file', self.managed_dir_path.joinpath('video.mp4'))
         self._filename = filearg
         titlearg = kwargs.get('title', "Test Title")
         descriptionarg = kwargs.get('description', "Test Description")

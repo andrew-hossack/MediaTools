@@ -30,4 +30,4 @@ if __name__ == '__main__':
     body = f'{title} by {author}. {text}'
 
     # Download body to /dat/audio.mp3
-    tts.synthesize_speech(body)
+    tts.synthesize_speech(body, outfile_name='audio.mp3')

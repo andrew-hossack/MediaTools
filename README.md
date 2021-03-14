@@ -3,15 +3,33 @@ A project for automating the simple task of uploading mindless content to YouTub
 
 In the future, other sources of video, audio, and text-based content will be provided such as Reddit over Text To Speech (TTS) and more.
 
-## Installation Instructions
+## Getting Started
+
+### Installation Instructions
 To install this package using pip, in the root directory *vidtools/* run the command
 ```bash
 pip install .
 ```
 
-To use YouTubeTools.py, RedditTools.py and TTSTools.py, you will need to install a client secrets json file and instantiate the class using the absolute filepath. Please follow the instructions either listed in the specific class section below or as referenced in the class file itself to obtain a client secrets file.
+### Secrets Files
+Some VidTools classes require the use of client secrets json files. Currently, YouTubeTools.py, RedditTools.py and TTSTools.py need them. Please follow the instructions either listed in the specific class section below or as referenced in the class file itself to obtain a client secrets file.
 
 ## VidTools Classes
+
+### ```Managed Workspace```
+WorkspaceManager.py is the base class for all VidTools classes. This parent class has two basic attributes: *secrets_filepath* and *managed_path*. Secrets filepath can be specified as an absolute filepath to a json secrets file, or can be specified as none at class init in the child class.
+
+```python
+args:
+    secrets_filepath (str):
+        Absolute filepath of secrets json file to load
+kwargs:
+    managed_path (str):
+        Managed directory name from root
+        Defaults to /dat
+```
+
+The managed filepath points to a basic directory to store all VidTools files in. It defaults to *root/dat*.
 
 ### ```TikTokTools Class```
 Built on [TikTokApi by David Teather](https://github.com/davidteather/TikTok-Api), ```TikTokTools``` is a wrapper class to enable the user to quickly source content from TikTok without needing developer API access. 

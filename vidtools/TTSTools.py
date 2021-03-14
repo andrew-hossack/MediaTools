@@ -7,30 +7,27 @@
 
 from google.cloud import texttospeech
 import os
-from pathlib import Path
+from vidtools.WorkspaceManager import ManagedWorkspace
 
 
-class TTSHelper:
+class TTSHelper(ManagedWorkspace):
     '''
     Text to speech helper class
     https://googleapis.dev/python/texttospeech/latest/index.html
     '''
 
-    def __init__(self, secrets_filepath, outfile_name='audio.mp3', **kwargs):
+    def __init__(self, outfile_name='audio.mp3', **kwargs):
         '''
-        args:
-            secrets_filepath (str):
-                Absolute path to secrets file json
         kwargs:
             outfile_name (str): name of audio output file
                 Defaults to audio.mp3
         '''
+        super().__init__(**kwargs)
         self._text = None
-        self._output_directory = Path(__file__).parent.joinpath('dat')
-        self._secrets_filepath = Path(secrets_filepath)
+        self._output_directory = self.managed_dir_path.joinpath('dat')
         self._outfile_name = outfile_name
         self._client = texttospeech.TextToSpeechClient()
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self._secrets_filepath
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = self.secrets_path
 
     def synthesize_speech(self, text, 
                           language_code="en-US", 

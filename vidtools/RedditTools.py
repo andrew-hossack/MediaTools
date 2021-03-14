@@ -5,17 +5,16 @@
  '''
 
 
-import json
-from pathlib import Path
 import praw
+from vidtools.WorkspaceManager import ManagedWorkspace
 
 
-class RedditTools:
+class RedditTools(ManagedWorkspace):
     '''
     Wrapper class for praw
     https://praw.readthedocs.io/en/latest/
     '''
-    def __init__(self, secrets_filepath):
+    def __init__(self, **kwargs):
         '''
         args:
             secrets_filepath (str):
@@ -26,9 +25,8 @@ class RedditTools:
             self.submission (post): PRAW post object, must call
                                     set_url(url) to use other methods
         '''
-        self._secrets_dir = Path(secrets_filepath)
-        with open(self._secrets_dir) as redditsecrets:
-            self._secrets = json.load(redditsecrets)
+        super().__init__(**kwargs)
+        self._secrets = self.load_json(self.secrets_path)
         self.prawclient = praw.Reddit(client_id=self._secrets['web']['client_id'], 
                             client_secret=self._secrets['web']['client_secret'],
                             refresh_token=self._secrets['web']['refresh_token'],
