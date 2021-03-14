@@ -5,8 +5,8 @@
  '''
 
 
-from vidtools.RedditTools import RedditTools
-from vidtools.TTSTools import TTSHelper
+from mediatools.RedditTools import RedditTools
+from mediatools.TTSTools import TTSHelper
 
 
 if __name__ == '__main__':
@@ -14,8 +14,8 @@ if __name__ == '__main__':
     Download a reddit post and convert to audio file for processing
     '''
     
-    rt = RedditTools('/Users/andrew/Documents/VidTools/vidtools/private/reddit_client_secrets.json')
-    tts = TTSHelper('/Users/andrew/Documents/VidTools/vidtools/private/google_tts_secrets.json')
+    rt = RedditTools('/Users/andrew/Documents/ContentTools/contenttools/private/reddit_client_secrets.json')
+    tts = TTSHelper('/Users/andrew/Documents/ContentTools/contenttools/private/google_tts_secrets.json')
 
     # Get a post URL. Reference PRAW for other automated methods
     url = 'https://www.reddit.com/r/redditdev/comments/hasnnc/where_do_i_find_the_reddit_client_id_and_secret/'

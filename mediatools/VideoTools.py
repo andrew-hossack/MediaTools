@@ -10,7 +10,7 @@ import os
 import pprint
 from queue import Queue
 import requests
-from vidtools.WorkspaceManager import ManagedWorkspace
+from mediatools.WorkspaceManager import ManagedWorkspace
 import yaml
 
 

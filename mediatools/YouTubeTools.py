@@ -18,7 +18,7 @@ from googleapiclient.http import MediaFileUpload
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
-from vidtools.WorkspaceManager import ManagedWorkspace
+from mediatools.WorkspaceManager import ManagedWorkspace
 
 
 class YouTubeTools(ManagedWorkspace):
@@ -27,7 +27,7 @@ class YouTubeTools(ManagedWorkspace):
     Wrapper class for Google Api Python Client:
         https://developers.google.com/youtube/v3/guides/uploading_a_video
 
-    Make sure to include your client_secrets.json file in vidtools directory!
+    Make sure to include your client_secrets.json file in mediatools directory!
     '''
 
     def __init__(self, **kwargs):

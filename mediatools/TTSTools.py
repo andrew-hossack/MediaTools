@@ -7,7 +7,7 @@
 
 from google.cloud import texttospeech
 import os
-from vidtools.WorkspaceManager import ManagedWorkspace
+from mediatools.WorkspaceManager import ManagedWorkspace
 
 
 class TTSHelper(ManagedWorkspace):

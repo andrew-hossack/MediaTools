@@ -1,4 +1,4 @@
-include vidtools/video.yaml
-include vidtools/lib/refreshtokengen.py
-graft vidtools/dat
-graft vidtools/examples
+include mediatools/video.yaml
+include mediatools/lib/refreshtokengen.py
+graft mediatools/dat
+graft mediatools/examples

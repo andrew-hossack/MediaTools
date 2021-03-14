@@ -7,16 +7,16 @@
 
 
 from googleapiclient.errors import HttpError
-from vidtools.TikTokTools import TikTokTools
-from vidtools.VideoTools import VideoTools
-from vidtools.YouTubeTools import YouTubeTools
+from mediatools.TikTokTools import TikTokTools
+from mediatools.VideoTools import VideoTools
+from mediatools.YouTubeTools import YouTubeTools
 
 
 if __name__ == "__main__":
     # Instantiate video resources
     tt = TikTokTools()
     vt = VideoTools()
-    ytt = YouTubeTools('/Users/andrew/Documents/VidTools/vidtools/private/reddit_client_secrets.json')
+    ytt = YouTubeTools('/Users/andrew/Documents/MediaTools/mediatools/private/reddit_client_secrets.json')
 
     # Get parsed videolist with one video, no more than 20 seconds long
     videolist_parsed = tt.get_video_list(
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     print('The new config looks like this:')
     vt.pp_config()
 
-    # Get video information from VidTools config
+    # Get video information from mediatools config
     title = vt.title
     author = vt.author
     description = vt.description

@@ -1,4 +1,4 @@
-# VidTools Content Creation Library
+# MediaTools Content Creation Library
 A project for automating the simple task of uploading mindless content to YouTube. This library is written to leverage different input video sources and includes resources like TikTokTools to get content. 
 
 In the future, other sources of video, audio, and text-based content will be provided such as Reddit over Text To Speech (TTS) and more.
@@ -6,18 +6,18 @@ In the future, other sources of video, audio, and text-based content will be pro
 ## Getting Started
 
 ### Installation Instructions
-To install this package using pip, in the root directory *vidtools/* run the command
+To install this package using pip, in the root directory *MediaTools/* run the command
 ```bash
 pip install .
 ```
 
 ### Secrets Files
-Some VidTools classes require the use of client secrets json files. Currently, YouTubeTools.py, RedditTools.py and TTSTools.py need them. Please follow the instructions either listed in the specific class section below or as referenced in the class file itself to obtain a client secrets file.
+Some MediaTools classes require the use of client secrets json files. Currently, YouTubeTools.py, RedditTools.py and TTSTools.py need them. Please follow the instructions either listed in the specific class section below or as referenced in the class file itself to obtain a client secrets file.
 
-## VidTools Classes
+## MediaTools Classes
 
 ### ```Managed Workspace```
-WorkspaceManager.py is the base class for all VidTools classes. This parent class has two basic attributes: *secrets_filepath* and *managed_path*. Secrets filepath can be specified as an absolute filepath to a json secrets file, or can be specified as none at class init in the child class.
+WorkspaceManager.py is the base class for all MediaTools classes. This parent class has two basic attributes: *secrets_filepath* and *managed_path*. Secrets filepath can be specified as an absolute filepath to a json secrets file, or can be specified as none at class init in the child class.
 
 ```python
 args:
@@ -29,7 +29,7 @@ kwargs:
         Defaults to /dat
 ```
 
-The managed filepath points to a basic directory to store all VidTools files in. It defaults to *root/dat*.
+The managed filepath points to a basic directory to store all MediaTools files in. It defaults to *root/dat*.
 
 ### ```TikTokTools Class```
 Built on [TikTokApi by David Teather](https://github.com/davidteather/TikTok-Api), ```TikTokTools``` is a wrapper class to enable the user to quickly source content from TikTok without needing developer API access. 

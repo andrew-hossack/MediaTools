@@ -6,7 +6,7 @@
 
 
 import praw
-from vidtools.WorkspaceManager import ManagedWorkspace
+from mediatools.WorkspaceManager import ManagedWorkspace
 
 
 class RedditTools(ManagedWorkspace):

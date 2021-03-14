@@ -7,7 +7,7 @@
 
 from TikTokApi import TikTokApi
 from queue import Queue
-from vidtools.WorkspaceManager import ManagedWorkspace
+from mediatools.WorkspaceManager import ManagedWorkspace
 
 
 class TikTokTools(ManagedWorkspace):
